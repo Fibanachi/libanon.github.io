@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase.js"></script>
+
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyDWz4O_orHfiHfDR9-FPgqFSw5TNY0Jt0Q",
+        authDomain: "test-c1f6b.firebaseapp.com",
+        databaseURL: "https://test-c1f6b.firebaseio.com",
+        projectId: "test-c1f6b",
+        storageBucket: "test-c1f6b.appspot.com",
+        messagingSenderId: "621789750734",
+        appId: "1:621789750734:web:1bc0420b7c98ef9d60379f",
+        measurementId: "G-ZNT64EJLK4"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    function writeData() {
+        const id = document.getElementById('id').value
+        const name = document.getElementById('name').value
+        const age = document.getElementById('age').value
+        console.log([id,name, age])
+        firebase.database().ref(`users${id}`).set({
+            name,
+            age
+        });
+        console.log('stop')
+    }
+
+    function getData() {
+        firebase.database().ref('/').once('value',function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                var childKey = childSnapshot.key;
+                var childData = childSnapshot.val();
+                document.getElementById('data').innerHTML = childData['name'] + childData['age']
+                console.log([childData, childKey])
+            })
+        })
+    }
+
+    getData();
+
+</script>
+
+
+<h1>User DataBase</h1>
+<input type="id" placeholder="ID" id="id">
+<input type='name' placeholder="Name" id="name">
+<input type="age" placeholder="age" id="age">
+<button onclick="writeData()">Submit</button>
+<hr>
+<p id="data"></p>
+</body>
+</html>
